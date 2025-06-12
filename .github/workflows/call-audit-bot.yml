@@ -39,17 +39,33 @@ jobs:
         run: |
           echo "Generated token starts with: $(echo '${{ steps.generate-token.outputs.token }}' | cut -c1-10)"
 
-      # 3. Trigger the downstream audit workflow
-      - name: Send repository-dispatch event
+      - name: Send request to the audit workflow
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ steps.generate-token.outputs.token }}
+          # TEMPORARILY use the PAT instead of the App token for this test
+          token: ${{ secrets.TEMP_PAT }}
+
           repository: Boolafish-Playground/test-target-workflow
           event-type: run-audit-bot
-          client-payload: |
+          client-payload: >-
             {
-              "comment": ${{ toJSON(github.event.comment) }},
-              "repository": "${{ github.repository }}",
-              "issue": ${{ toJSON(github.event.issue) }},
-              "pull_request": ${{ toJSON(github.event.pull_request) }}
+              "comment_body": "${{ github.event.comment.body }}",
+              "source_repo": "${{ github.repository }}",
+              "pr_number": "${{ github.event.issue.number }}",
+              "commenter": "${{ github.actor }}"
             }
+
+      # 3. Trigger the downstream audit workflow
+      # - name: Send repository-dispatch event
+      #   uses: peter-evans/repository-dispatch@v3
+      #   with:
+      #     token: ${{ steps.generate-token.outputs.token }}
+      #     repository: Boolafish-Playground/test-target-workflow
+      #     event-type: run-audit-bot
+      #     client-payload: |
+      #       {
+      #         "comment": ${{ toJSON(github.event.comment) }},
+      #         "repository": "${{ github.repository }}",
+      #         "issue": ${{ toJSON(github.event.issue) }},
+      #         "pull_request": ${{ toJSON(github.event.pull_request) }}
+      #       }
