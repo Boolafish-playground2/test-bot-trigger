@@ -11,7 +11,7 @@ on:
 jobs:
   dispatch-audit-request:
     # IMPORTANT: Only run for comments that start with /audit-bot
-    if: ${{ github.event.pull_request && startsWith(github.event.comment.body, '/audit-bot') }}
+    if: ${{ startsWith(github.event.comment.body, '/audit-bot') && ((github.event_name == 'issue_comment' && github.event.issue && github.event.issue.pull_request) || github.event_name == 'pull_request_review_comment') }}
     runs-on: ubuntu-latest
 
     steps:
