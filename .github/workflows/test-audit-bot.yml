@@ -1,0 +1,30 @@
+name: Test Audit Bot (Debug)
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  debug-trigger:
+    # Test if the workflow triggers at all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug - Print event info
+        run: |
+          echo "Comment created!"
+          echo "Comment body: ${{ github.event.comment.body }}"
+          echo "Is pull request: ${{ !!github.event.issue.pull_request }}"
+          echo "Starts with /audit-bot: ${{ startsWith(github.event.comment.body, '/audit-bot') }}"
+          echo "Full condition result: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/audit-bot') }}"
+
+  dispatch-audit-request:
+    # IMPORTANT: Only run for comments that start with /audit-bot
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/audit-bot')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Workflow triggered successfully
+        run: |
+          echo "✅ Audit bot workflow triggered!"
+          echo "Comment: ${{ github.event.comment.body }}"
+          echo "PR number: ${{ github.event.issue.number }}"
+          echo "Repository: ${{ github.repository }}"
