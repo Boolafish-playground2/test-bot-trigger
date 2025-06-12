@@ -26,10 +26,11 @@ jobs:
       contents: read
 
     steps:
-      # 1. Generate a token from the GitHub App
-      - name: Generate GitHub App token
+       # This is how you would use the official GitHub action.
+      # It accomplishes the same thing as the tibdex action.
+      - name: Generate a token from the GitHub App
         id: generate-token
-        uses: tibdex/github-app-token@v2
+        uses: actions/create-github-app-token@v1
         with:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
