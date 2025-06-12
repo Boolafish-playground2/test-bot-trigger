@@ -23,6 +23,12 @@ jobs:
           app_id: ${{ secrets.BOT_APP_ID }}
           private_key: ${{ secrets.BOT_PRIVATE_KEY }}
 
+      # Step 2: THIS IS THE NEW DEBUGGING STEP
+      # It prints the first 10 characters of the token to the log.
+      # This proves whether Step 1 succeeded or failed.
+      - name: DEBUG - Check if token was generated
+        run: echo "Generated token starts with: ${{ steps.generate-token.outputs.token[:10] }}"
+
       - name: Send request to the audit workflow
         uses: peter-evans/repository-dispatch@v3
         with:
