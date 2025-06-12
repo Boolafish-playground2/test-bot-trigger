@@ -1,0 +1,27 @@
+name: Simple Comment Test
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  any-comment:
+    # This should run on ANY comment (issue or PR)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment detected
+        run: |
+          echo "🎉 Comment detected!"
+          echo "Comment body: ${{ github.event.comment.body }}"
+          echo "Issue/PR number: ${{ github.event.issue.number }}"
+          echo "Is PR: ${{ !!github.event.issue.pull_request }}"
+          
+  pr-comment-only:
+    # This should only run on PR comments
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR comment detected
+        run: |
+          echo "✅ PR comment detected!"
+          echo "PR number: ${{ github.event.issue.number }}"
