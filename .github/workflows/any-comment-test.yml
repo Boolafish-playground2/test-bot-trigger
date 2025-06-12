@@ -1,0 +1,15 @@
+name: Any Comment Test
+
+on: issue_comment
+
+jobs:
+  test-any-comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment detected
+        run: |
+          echo "🎉 Any comment detected!"
+          echo "Comment body: '${{ github.event.comment.body }}'"
+          echo "Comment author: ${{ github.event.comment.user.login }}"
+          echo "Issue/PR number: ${{ github.event.issue.number }}"
+          echo "Is PR: ${{ !!github.event.issue.pull_request }}"

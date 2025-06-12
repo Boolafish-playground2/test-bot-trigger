@@ -1,0 +1,17 @@
+name: Test Audit Bot Trigger
+
+on: issue_comment
+
+jobs:
+  test-trigger:
+    # IMPORTANT: Only run for comments that start with /audit-bot
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/audit-bot')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log trigger info
+        run: |
+          echo "Audit bot triggered!"
+          echo "Comment body: ${{ github.event.comment.body }}"
+          echo "PR number: ${{ github.event.issue.number }}"
+          echo "Repository: ${{ github.repository }}"
