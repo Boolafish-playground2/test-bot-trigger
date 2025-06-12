@@ -45,21 +45,21 @@ jobs:
         run: |
           echo "Generated token starts with: $(echo '${{ steps.generate-token.outputs.token }}' | cut -c1-10)"
 
-      - name: Send request to the audit workflow
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          # TEMPORARILY use the PAT instead of the App token for this test
-          token: ${{ secrets.TEMP_PAT }}
+      # - name: Send request to the audit workflow
+      #   uses: peter-evans/repository-dispatch@v3
+      #   with:
+      #     # TEMPORARILY use the PAT instead of the App token for this test
+      #     token: ${{ secrets.TEMP_PAT }}
 
-          repository: Boolafish-Playground/test-target-workflow
-          event-type: run-audit-bot
-          client-payload: >-
-            {
-              "comment_body": "${{ github.event.comment.body }}",
-              "source_repo": "${{ github.repository }}",
-              "pr_number": "${{ github.event.issue.number }}",
-              "commenter": "${{ github.actor }}"
-            }
+      #     repository: Boolafish-Playground/test-target-workflow
+      #     event-type: run-audit-bot
+      #     client-payload: >-
+      #       {
+      #         "comment_body": ${{ toJSON(github.event.comment.body) }},
+      #         "source_repo": "${{ github.repository }}",
+      #         "pr_number": "${{ github.event.issue.number }}",
+      #         "commenter": "${{ github.actor }}"
+      #       }
 
       # 3. Trigger the downstream audit workflow
       - name: Send repository-dispatch event
