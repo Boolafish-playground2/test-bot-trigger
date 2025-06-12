@@ -1,0 +1,36 @@
+name: PR Comment Debug
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  issue-comment-test:
+    if: ${{ !github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Issue comment detected
+        run: |
+          echo "✅ Issue comment works!"
+          echo "Comment: '${{ github.event.comment.body }}'"
+
+  pr-comment-test:
+    if: ${{ github.event.issue.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR comment detected
+        run: |
+          echo "✅ PR comment works!"
+          echo "Comment: '${{ github.event.comment.body }}'"
+          echo "PR number: ${{ github.event.issue.number }}"
+
+  pr-review-comment-test:
+    if: ${{ github.event.pull_request }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: PR review comment detected
+        run: |
+          echo "✅ PR review comment works!"
+          echo "Comment: '${{ github.event.comment.body }}'"
