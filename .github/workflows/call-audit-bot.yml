@@ -26,14 +26,19 @@ jobs:
       contents: read
 
     steps:
-       # This is how you would use the official GitHub action.
-      # It accomplishes the same thing as the tibdex action.
+      # Step 1: Generate a token scoped for the TARGET repository
       - name: Generate a token from the GitHub App
         id: generate-token
         uses: actions/create-github-app-token@v1
         with:
-          app_id: ${{ secrets.BOT_APP_ID }}
-          private_key: ${{ secrets.BOT_PRIVATE_KEY }}
+          # Use the new kebab-case input names
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+          # --- THIS IS THE CRITICAL FIX ---
+          # Specify the owner and repository where you want to use the token
+          owner: 'Boolafish-Playground'
+          repositories: 'test-target-workflow'
 
       # 2. DEBUG – print the first 10 characters of the token
       - name: DEBUG – show token prefix
